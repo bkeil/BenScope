@@ -2,6 +2,7 @@ load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 
 cc_library(
     name = "cbm_floats",
+    srcs = ["cbm_floats.cc"],
     hdrs = ["cbm_floats.h"],
 )
 

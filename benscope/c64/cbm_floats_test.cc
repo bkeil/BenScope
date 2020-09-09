@@ -34,11 +34,15 @@ TEST(CbmFloatsTest, Exponents) {
 TEST(CbmFloatsTest, Mantissa) {
   {
     CBMPackedFloat f(0.5);
+    CBMUnpackedFloat g(0.5);
     EXPECT_THAT(f.sign_and_mantissa_0, Eq(0b00000000)); // Implicit 1 for 1/2.
+    EXPECT_THAT(g.mantissa_0, Eq(0b10000000)); // Unpacked has explicit 1.
   }
   {
     CBMPackedFloat f(0.75);
+    CBMUnpackedFloat g(0.75);
     EXPECT_THAT(f.sign_and_mantissa_0, Eq(0b01000000)); // Explicit 1 for 1/4.
+    EXPECT_THAT(g.mantissa_0, Eq(0b11000000));
   }
   {
     CBMPackedFloat f(0.875);
@@ -52,6 +56,23 @@ TEST(CbmFloatsTest, Mantissa) {
     CBMPackedFloat f(0.96875);
     EXPECT_THAT(f.sign_and_mantissa_0, Eq(0b01111000)); // Add 1/32.
   }
+}
+
+TEST(CbmFloatsTest, Zeros) {
+  CBMPackedFloat packed(0);
+  EXPECT_THAT(packed.exponent_excess_128, Eq(0));
+  EXPECT_THAT(packed.sign_and_mantissa_0, Eq(0));
+  EXPECT_THAT(packed.mantissa_1, Eq(0));
+  EXPECT_THAT(packed.mantissa_2, Eq(0));
+  EXPECT_THAT(packed.mantissa_3, Eq(0));
+
+  CBMUnpackedFloat unpacked(0);
+  EXPECT_THAT(unpacked.exponent_excess_128, Eq(0));
+  EXPECT_THAT(unpacked.mantissa_0, Eq(0));
+  EXPECT_THAT(unpacked.mantissa_1, Eq(0));
+  EXPECT_THAT(unpacked.mantissa_2, Eq(0));
+  EXPECT_THAT(unpacked.mantissa_3, Eq(0));
+  EXPECT_THAT(unpacked.sign, Eq(0));
 }
 
 } // namespace
